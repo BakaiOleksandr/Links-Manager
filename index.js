@@ -11,7 +11,8 @@ foldersLocalArray.forEach((fdata) => {
         <div class='btn-and-namefolder'>
         <button  class='btn-expandfolder'>▼</button>
         <div class='name-folder-container'>
-        <p class='folder-name'>${fdata.name}</p></div>
+        <p class='folder-name'>${fdata.name}</p>
+        <button class='edit-foldername-btn'>Edit</button></div>
         <button class='create-url-btn'>Create URL</button>
         </div>
         `;
@@ -22,6 +23,11 @@ foldersLocalArray.forEach((fdata) => {
   const underFolderBtn = folder.querySelector('.btn-expandfolder');
   underFolderBtn.addEventListener('click', () => {
     createUnderFolderWindow(folder);
+  });
+  const editFolderNameBtn = folder.querySelector('.edit-foldername-btn');
+  const folderName = folder.querySelector('.folder-name');
+  editFolderNameBtn.addEventListener('click', () => {
+    editFolderName(folderName);
   });
 });
 //MODAL WINDOW
@@ -75,7 +81,8 @@ function createFolder(inputNameFolder, modalContainer) {
         <div class='btn-and-namefolder'>
         <button  class='btn-expandfolder'>▼</button>
         <div class='name-folder-container'>
-        <p class='folder-name'></p></div>
+        <p class='folder-name'></p>
+        <button class='edit-foldername-btn'>Edit</button></div>
         <button class='create-url-btn'>Create URL</button>
         </div>
         `;
@@ -89,10 +96,53 @@ function createFolder(inputNameFolder, modalContainer) {
     foldersContainer.append(folder);
     CreateURLModalWindow(folder);
     deleteFolderListener(folder);
+    const editFolderNameBtn = folder.querySelector('.edit-foldername-btn');
+    editFolderNameBtn.addEventListener('click', () => {
+      editFolderName(folderName);
+    });
     modalContainer.remove();
     foldersLocalArray.push({name: inputValue, links: []});
     localStorage.setItem('folders', JSON.stringify(foldersLocalArray));
   }
+}
+//Edit folder name
+function editFolderName(folderName) {
+  const currentFolderName = folderName.textContent.trim();
+  folderName.innerHTML = `<input class='folder-name-input'
+ type='text'
+  placeholder='${currentFolderName}'
+value='${currentFolderName}'></input>`;
+  const inputChangeFolderName = folderName.querySelector('.folder-name-input');
+  inputChangeFolderName.focus();
+  inputChangeFolderName.select();
+
+  function saveName() {
+    const newFolderName =
+      inputChangeFolderName.value.trim() || currentFolderName;
+    if (newFolderName === currentFolderName) {
+      folderName.textContent = currentFolderName;
+      return;
+    }
+    const duplicate = foldersLocalArray.some(
+      (f) => f.name.toLowerCase() === newFolderName.toLowerCase()
+    );
+    if (duplicate) {
+      alert(`Folder ${newFolderName} has already exist!`);
+      folderName.textContent = currentFolderName;
+      return;
+    }
+    const targetFolder = foldersLocalArray.find(
+      (f) => f.name === currentFolderName
+    );
+    if (targetFolder) {
+      targetFolder.name = newFolderName;
+      localStorage.setItem('folders', JSON.stringify(foldersLocalArray));
+    }
+    folderName.textContent = newFolderName;
+  }
+  inputChangeFolderName.addEventListener('keydown', (e) => {
+    if (e.code === 'Enter') saveName();
+  });
 }
 //DELETE FOLDER LISTENER
 function deleteFolderListener(folder) {
@@ -165,14 +215,14 @@ function createContentOfFolder(inputURLLink, inputURLName, folder, createURL) {
     underFolderWindow.className = 'underfolder-window';
   }
 
-  // Удаляем текст "No links yet", если он есть
+  // delete text No links ,if it exist
   underFolderWindow.querySelectorAll('p').forEach((p) => {
     if (p.textContent === 'No links yet') {
       p.remove();
     }
   });
 
-  // === создаём элементы ссылки ===
+  // === create elements of links ===
   const linkContainer = document.createElement('div');
   linkContainer.className = 'link-container';
 
@@ -184,13 +234,13 @@ function createContentOfFolder(inputURLLink, inputURLName, folder, createURL) {
   linkEl.textContent = url;
   linkEl.target = '_blank';
 
-  // === кнопка удаления ===
+  // === delete button ===
   const deleteBtn = document.createElement('button');
   deleteBtn.textContent = 'Delete';
   deleteBtn.className = 'delete-link-btn';
   deleteBtn.title = 'Delete this link';
 
-  // === логика удаления ===
+  // === delete logic ===
   deleteBtn.addEventListener('click', () => {
     const folderName = folder.querySelector('.folder-name').textContent;
     const targetFolder = foldersLocalArray.find((f) => f.name === folderName);
@@ -202,7 +252,7 @@ function createContentOfFolder(inputURLLink, inputURLName, folder, createURL) {
     }
     linkContainer.remove();
 
-    // если после удаления нет ссылок — показать сообщение
+    // if after removing links, there are no links - show
     if (targetFolder.links.length === 0) {
       const emptyMsg = document.createElement('p');
       emptyMsg.textContent = 'No links yet';
@@ -210,7 +260,7 @@ function createContentOfFolder(inputURLLink, inputURLName, folder, createURL) {
     }
   });
 
-  // добавляем всё в окно
+  // add everything in window
   linkContainer.append(
     linkNameEl,
     linkEl,
@@ -219,7 +269,7 @@ function createContentOfFolder(inputURLLink, inputURLName, folder, createURL) {
   );
   underFolderWindow.append(linkContainer);
 
-  // === сохраняем в localStorage ===
+  // === save to localStorage ===
   const folderName = folder.querySelector('.folder-name').textContent;
   const targetFolder = foldersLocalArray.find((f) => f.name === folderName);
   if (targetFolder) {
@@ -227,20 +277,20 @@ function createContentOfFolder(inputURLLink, inputURLName, folder, createURL) {
     localStorage.setItem('folders', JSON.stringify(foldersLocalArray));
   }
 
-  // закрываем модалку
+  // close modal
   createURL.remove();
 }
 
 function createUnderFolderWindow(folder) {
   let next = folder.nextElementSibling;
 
-  // Если окно уже открыто — закрыть
+  // if window is open - close
   if (next && next.classList.contains('underfolder-window')) {
     next.remove();
     return;
   }
 
-  // Создание окна ссылок
+  // Create links window
   let underFolderWindow = document.createElement('div');
   folder.after(underFolderWindow);
   underFolderWindow.className = 'underfolder-window';
@@ -248,13 +298,13 @@ function createUnderFolderWindow(folder) {
   const folderName = folder.querySelector('.folder-name').textContent;
   const targetFolder = foldersLocalArray.find((f) => f.name === folderName);
 
-  // Если нет ссылок
+  // if there is no links
   if (!targetFolder || targetFolder.links.length === 0) {
     underFolderWindow.innerHTML = `<p>No links yet</p>`;
     return;
   }
 
-  // Отображаем ссылки
+  // Show links
   targetFolder.links.forEach((linkObj, index) => {
     const linkContainer = document.createElement('div');
     linkContainer.className = 'link-container';

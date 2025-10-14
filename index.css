@@ -116,6 +116,8 @@ input {
   width: 100%;
   display: flex;
   justify-content: center;
+  gap: 1rem;
+  align-items: center;
 }
 .btn-expandfolder {
   display: flex;
@@ -172,4 +174,7 @@ input {
 .delete-link-btn {
   height: 1rem;
   margin-top: 1rem;
+}
+.edit-foldername-btn {
+  height: 1rem;
 }
