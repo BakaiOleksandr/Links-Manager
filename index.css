@@ -1,12 +1,21 @@
+html,
+body {
+  height: 100%;
+}
 body {
   font-family: monospace;
   width: 100%;
   margin: 0;
   padding: 0;
-  background-color: rgb(242, 251, 255);
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-repeat: no-repeat;
+  background: radial-gradient(
+    circle,
+    rgba(238, 174, 202, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
 }
 h1,
 h2,
@@ -27,7 +36,7 @@ h3 {
 button {
   white-space: nowrap;
   cursor: pointer;
-  background-color: #ffffff;
+  background-color: rgb(253, 253, 253);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 0.25rem;
   box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
@@ -58,7 +67,11 @@ input {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(242, 251, 255);
+  background: radial-gradient(
+    circle,
+    rgba(238, 174, 202, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
 }
 .close-modal-btn {
   width: 10rem;
@@ -75,7 +88,7 @@ input {
 .folder {
   margin: 1rem;
   width: 90%;
-  background-color: rgb(231, 231, 231);
+  background-color: rgb(229, 205, 250);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -105,7 +118,11 @@ input {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(242, 251, 255);
+  background: radial-gradient(
+    circle,
+    rgba(238, 174, 202, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
 }
 .btn-and-namefolder {
   display: flex;
@@ -166,15 +183,44 @@ input {
   margin-bottom: 1rem;
   text-align: center;
 }
+
 .link-container {
+  border: 0.03rem solid rgb(192, 195, 245);
+  border-radius: 0.3rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-bottom: 1rem;
 }
+
 .delete-link-btn {
   height: 1rem;
   margin-top: 1rem;
+  margin-right: 1rem;
 }
 .edit-foldername-btn {
   height: 1rem;
+}
+.folder-name-input {
+  width: 100%;
+}
+.input-folder-name,
+.input-url-name,
+.input-url-value {
+  outline: none;
+  border: none;
+  background-color: rgb(255, 255, 255, 0.2);
+}
+.linkname-delete-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.linkname-delete-container p {
+  margin-left: 1rem;
+  font-size: 1.5rem;
+}
+.link-container a {
+  margin-left: 1rem;
 }

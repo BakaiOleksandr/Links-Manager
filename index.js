@@ -38,7 +38,7 @@ function showModalWindow() {
   <h2>Write folder name</h2>
   <input type='text'
   autocomplete='off'
-  maxlength='30' class='input-folder-name'></input>
+  maxlength='20' class='input-folder-name'></input>
   <button class='create-folder-btn'>Create Folder</button>
   <button class='close-modal-btn'>Close</button>
   `;
@@ -108,7 +108,7 @@ function createFolder(inputNameFolder, modalContainer) {
 //Edit folder name
 function editFolderName(folderName) {
   const currentFolderName = folderName.textContent.trim();
-  folderName.innerHTML = `<input class='folder-name-input'
+  folderName.innerHTML = `<input maxlength='20' class='folder-name-input'
  type='text'
   placeholder='${currentFolderName}'
 value='${currentFolderName}'></input>`;
@@ -169,9 +169,9 @@ function CreateURLModalWindow(folder) {
     createURL.className = 'modal-url-window';
     createURL.innerHTML = `
       <h2>Copy and paste URL</h2>
-      <input auocomplete='off' class='input-url-value'></input>
+      <input  type='url'auocomplete='off' class='input-url-value'></input>
       <h2>Give a name of URL</h2>
-      <input auocomplete='off' class='input-url-name'></input>
+      <input maxlength='30'auocomplete='off' class='input-url-name'></input>
       <button class='submit-btn'>Submit</button>
       <button class='close-btn-url-modalwindow'>Close</button>`;
     document.body.append(createURL);
@@ -226,6 +226,9 @@ function createContentOfFolder(inputURLLink, inputURLName, folder, createURL) {
   const linkContainer = document.createElement('div');
   linkContainer.className = 'link-container';
 
+  const linkNamecontainer = document.createElement('div');
+  linkNamecontainer.className = 'linkname-delete-container';
+
   const linkNameEl = document.createElement('p');
   linkNameEl.textContent = urlName;
 
@@ -261,12 +264,8 @@ function createContentOfFolder(inputURLLink, inputURLName, folder, createURL) {
   });
 
   // add everything in window
-  linkContainer.append(
-    linkNameEl,
-    linkEl,
-    deleteBtn,
-    document.createElement('br')
-  );
+  linkNamecontainer.append(linkNameEl, deleteBtn);
+  linkContainer.append(linkNamecontainer, linkEl, document.createElement('br'));
   underFolderWindow.append(linkContainer);
 
   // === save to localStorage ===
