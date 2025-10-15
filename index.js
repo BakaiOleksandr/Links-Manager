@@ -231,6 +231,8 @@ function createContentOfFolder(inputURLLink, inputURLName, folder, createURL) {
 
   const linkNameEl = document.createElement('p');
   linkNameEl.textContent = urlName;
+  const UrlContainer = document.createElement('div');
+  UrlContainer.className = 'url-container';
 
   const linkEl = document.createElement('a');
   linkEl.setAttribute('href', url);
@@ -265,7 +267,11 @@ function createContentOfFolder(inputURLLink, inputURLName, folder, createURL) {
 
   // add everything in window
   linkNamecontainer.append(linkNameEl, deleteBtn);
-  linkContainer.append(linkNamecontainer, linkEl, document.createElement('br'));
+  linkContainer.append(linkNamecontainer);
+  linkContainer.append(UrlContainer);
+  UrlContainer.append(linkEl);
+
+  linkContainer.append(document.createElement('br'));
   underFolderWindow.append(linkContainer);
 
   // === save to localStorage ===
@@ -307,7 +313,8 @@ function createUnderFolderWindow(folder) {
   targetFolder.links.forEach((linkObj, index) => {
     const linkContainer = document.createElement('div');
     linkContainer.className = 'link-container';
-
+    const linkNameContainer = document.createElement('div');
+    linkNameContainer.className = 'linkname-delete-container';
     const linkName = document.createElement('p');
     linkName.textContent = linkObj.name;
 
@@ -320,7 +327,10 @@ function createUnderFolderWindow(folder) {
     deleteBtn.textContent = 'Delete';
     deleteBtn.className = 'delete-link-btn';
     deleteBtn.title = 'Delete this link';
-
+    linkNameContainer.append(linkName, deleteBtn);
+    const urlContainer = document.createElement('div');
+    urlContainer.className = 'url-container';
+    urlContainer.append(link);
     deleteBtn.addEventListener('click', () => {
       // Удаляем из массива
       targetFolder.links.splice(index, 1);
@@ -338,9 +348,8 @@ function createUnderFolderWindow(folder) {
     });
 
     linkContainer.append(
-      linkName,
-      link,
-      deleteBtn,
+      linkNameContainer,
+      urlContainer,
       document.createElement('br')
     );
     underFolderWindow.appendChild(linkContainer);

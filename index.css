@@ -221,6 +221,16 @@ input {
   margin-left: 1rem;
   font-size: 1.5rem;
 }
-.link-container a {
-  margin-left: 1rem;
+.url-container {
+  width: 100%;
+}
+.url-container a {
+  text-decoration: none;
+  color: rgb(122, 142, 241);
+  padding: 0 1rem 0 1rem;
+  display: block;
+  overflow-wrap: break-word;
+}
+.url-container a:hover {
+  color: rgb(243, 196, 40);
 }
